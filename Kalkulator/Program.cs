@@ -16,19 +16,43 @@ namespace Kalkulator
             {
                 try
                 {
-                    // Unos prvog broja
-                    Console.Write("Unesite prvi broj: ");
-                    double num1 = Convert.ToDouble(Console.ReadLine());
+                    // Unos prvog broja sa validacijom
+                    double num1;
+                    while (true)
+                    {
+                        Console.Write("Unesite prvi broj: ");
+                        if (double.TryParse(Console.ReadLine(), out num1))
+                            break;
+                        Console.WriteLine("Nevalidan unos. Molimo unesite broj.");
+                    }
 
-                    // Unos operatora
-                    Console.Write("Unesite operator (+, -, *, /): ");
-                    char op = Console.ReadLine()[0];
+                    // Unos operatora sa validacijom
+                    char op;
+                    while (true)
+                    {
+                        Console.Write("Unesite operator (+, -, *, /): ");
+                        string input = Console.ReadLine();
+                        if (input.Length == 1 && "+-*/".Contains(input))
+                        {
+                            op = input[0];
+                            break;
+                        }
+                        Console.WriteLine("Nevalidan operator. Molimo unesite +, -, * ili /.");
+                    }
 
-                    // Unos drugog broja
-                    Console.Write("Unesite drugi broj: ");
-                    double num2 = Convert.ToDouble(Console.ReadLine());
+                    // Unos drugog broja sa validacijom
+                    double num2;
+                    while (true)
+                    {
+                        Console.Write("Unesite drugi broj: ");
+                        if (double.TryParse(Console.ReadLine(), out num2))
+                            break;
+                        Console.WriteLine("Nevalidan unos. Molimo unesite broj.");
+                    }
+
 
                     double result = 0;
+                    bool validOperation = true;
 
                     // Izračunavanje rezultata
                     switch (op)
@@ -49,21 +73,21 @@ namespace Kalkulator
                             }
                             else
                             {
-                                Console.WriteLine("Greška: Deljenje sa nulom nije dozvoljeno!");
-                                continue;
+                                Console.WriteLine("Greška: Dijeljenje sa nulom nije dozvoljeno!");
+                                validOperation = false;
                             }
                             break;
-                        default:
-                            Console.WriteLine("Greška: Nepoznat operator!");
-                            continue;
                     }
 
-                    // Prikaz rezultata
-                    Console.WriteLine($"Rezultat: {num1} {op} {num2} = {result}");
+                    if (validOperation)
+                    {
+                        Console.WriteLine($"Rezultat: {num1} {op} {num2} = {result}");
+                    }
+
                 }
-                catch (FormatException)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Greška: Uneli ste nevalidan broj!");
+                    Console.WriteLine($"Došlo je do neočekivane greške: {ex.Message}");
                 }
 
                 // Pitamo korisnika da li želi novi kalkulaciju
@@ -80,8 +104,8 @@ namespace Kalkulator
                     else if (answer == "ne")
                     {
                         Console.WriteLine("Hvala što koristite kalkulator. Doviđenja!");
-                        //Console.ReadKey();
-                        return; // Završava programmm
+                        Console.ReadKey();
+                        return; // Završava program
                     }
                     else
                     {
